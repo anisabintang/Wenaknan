@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useState, useEffect } from "react";
+import { useRouter } from "next/router";
 import axios from "axios";
 import Link from "next/link";
 import { decode } from 'jwt-js-decode';
@@ -7,14 +8,16 @@ import Navbar from "@/components/navbar";
 import RestaurantCard from "../../components/restcard";
 
 function Sidebar({ userInfo, onLogout }) {
+    const router = useRouter();
+
     return (
         <aside className="flex flex-col w-[23%] max-md:ml-0 max-md:w-full">
             <div className="flex flex-col grow justify-between p-5 mx-auto w-full text-base font-medium bg-white max-md:mt-1.5">
                 <img loading="lazy" src="" className="w-8 aspect-square" />
                 <nav>
                     <ul>
-                        <li className="flex mt-7 w-full text-black bg-blue-50 rounded">
-                            <a href="#" className="flex items-center gap-4 p-3 rounded w-full">
+                        <li className={`flex mt-7 w-full text-black ${router.pathname === '/main' ? 'bg-blue-50' : ''} rounded`}>
+                            <a href="/main" className="flex items-center gap-4 p-3 rounded w-full">
                                 <img
                                     loading="lazy"
                                     src="/assets/foryou.png"
@@ -23,8 +26,8 @@ function Sidebar({ userInfo, onLogout }) {
                                 <span className="flex-1">For You</span>
                             </a>
                         </li>
-                        <li className="flex mt-3 w-full rounded">
-                            <a href="favorites" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
+                        <li className={`flex mt-3 w-full rounded ${router.pathname === '/favorites' ? 'bg-blue-50' : ''}`}>
+                            <a href="/favorites" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
                                     src="/assets/favorites.png"
@@ -33,7 +36,7 @@ function Sidebar({ userInfo, onLogout }) {
                                 <span className="flex-1">Favorites</span>
                             </a>
                         </li>
-                        <li className="flex mt-3 w-full rounded">
+                        <li className={`flex mt-3 w-full rounded ${router.pathname === '/profile' ? 'bg-blue-50' : ''}`}>
                             <a href="#" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
