@@ -9,18 +9,14 @@ import axios from "axios";
 
 const STORAGE_URL = 'http://localhost:8080';
 
-function Main() {
+function Main({ userId }) {
     const [restaurants, setRestaurants] = useState([]);
     const [loading, setLoading] = useState(false);
 
     const fetchRestaurants = async () => {
         try {
             setLoading(true);
-            const response = await axios.get('http://localhost:8080/restaurant/status/', {
-                params: {
-                    user_id: 1 // Replace with the actual active user ID
-                }
-            });
+            const response = await axios.get(`http://localhost:8080/user/${userId}/favorites`);
             let data = response.data;
 
             const restaurantsWithAbsoluteImagePaths = data.map((restaurant) => {
@@ -40,8 +36,10 @@ function Main() {
     };
 
     useEffect(() => {
-        fetchRestaurants();
-    }, []);
+        if (userId) {
+            fetchRestaurants();
+        }
+    }, [userId]);
 
     const handleScroll = (event) => {
         const { scrollTop, clientHeight, scrollHeight } = event.currentTarget;
@@ -50,19 +48,6 @@ function Main() {
         }
     };
 
-    let restaurant = {
-        "restaurant_id": 139,
-        "restaurant_name": "Sejumput Pogung Baru",
-        "restaurant_location": "-7.76033,110.3765",
-        "restaurant_description": "yak ini restoran yang bagus banget. Selain enak, murah juga. cobain deh!",
-        "restaurant_rating": 4,
-        "image": "http://localhost:8080/storage/restaurant/SejumputPogungBaru.jpg",
-        "category_id": 1,
-        "restaurant_address": "Jl. Pogung Baru No.5 Blok B22, Pogung Kidul, Sinduadi, Kec. Mlati, Kabupaten Sleman, Daerah Istimewa Yogyakarta 55284",
-        "category": "Burjo",
-        "is_liked": false
-    }
-
     return (
         <main
             className="flex flex-col ml-5 w-[77%] max-md:ml-0 max-md:w-full"
@@ -70,11 +55,10 @@ function Main() {
             style={{ overflowY: "scroll", maxHeight: "100vh" }}
         >
             {loading && <p>Loading...</p>}
-            <div class="grid grid-cols-4 gap-1">
+            <div className="grid grid-cols-4 gap-1">
                 {restaurants.map((restaurant) => (
-                        <FaveCard restaurant={restaurant} />
-                    ))}
-                
+                    <FaveCard key={restaurant.restaurant_id} restaurant={restaurant} />
+                ))}
             </div>
         </main>
     );
@@ -82,6 +66,7 @@ function Main() {
 
 function MyComponent() {
     const [userInfo, setUserInfo] = useState({});
+    const [userId, setUserId] = useState(null);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -94,6 +79,8 @@ function MyComponent() {
                 name: decodedToken.payload.name,
                 email: decodedToken.payload.email
             });
+
+            setUserId(decodedToken.payload.user_id); // Assuming the token payload contains user_id
         } else {
             console.error('No token found');
         }
@@ -117,11 +104,10 @@ function MyComponent() {
                 <div className="mt-1.5 w-full max-md:max-w-full">
                     <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                         <Sidebar userInfo={userInfo} onLogout={handleLogout} />
-                        <Main />
+                        <Main userId={userId} />
                     </div>
                 </div>
             </div>
-
         </main>
     );
 }
