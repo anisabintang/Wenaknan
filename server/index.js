@@ -7,6 +7,7 @@ const restaurantRouter = require('./routers/restaurantRouter');
 const userRouter = require('./routers/userRouter');
 const favoriteRouter = require('./routers/favoriteRouter');
 const categoryRouter = require('./routers/categoryRouter');
+const customRouter = require('./routers/customRouter');
 
 const app = express();
 app.use(cors());
@@ -18,6 +19,7 @@ app.use('/restaurant', restaurantRouter);
 app.use('/user', userRouter);
 app.use('/favorite', favoriteRouter);
 app.use('/category', categoryRouter);
+app.use('/custom', customRouter);
 
 const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);

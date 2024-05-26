@@ -26,10 +26,11 @@ const favoriteController = {
 
     deleteFavorite: async (req, res) => {
         try {
-            const { id } = req.params;
+            const { user_id, restaurant_id } = req.body;
             const deleted = await favorite.destroy({
                 where: {
-                    favorite_id: id
+                    user_id: user_id,
+                    restaurant_id: restaurant_id
                 }
             });
             if (deleted) {

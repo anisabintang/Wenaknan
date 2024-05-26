@@ -1,10 +1,28 @@
 import React, { useState } from 'react';
+import axios from 'axios';
 
-const HeartButton = () => {
-  const [isLiked, setIsLiked] = useState(false);
+const HeartButton = ({ restaurantId, userId, initialLiked }) => {
+  const [isLiked, setIsLiked] = useState(initialLiked);
 
-  const handleClick = () => {
-    setIsLiked(!isLiked);
+  const handleClick = async (e) => {
+    e.stopPropagation();
+    try {
+      if (isLiked) {
+        // Delete favorite
+        await axios.delete('http://localhost:8080/favorite', {
+          data: { user_id: userId, restaurant_id: restaurantId }
+        });
+      } else {
+        // Add favorite
+        await axios.post('http://localhost:8080/favorite/add', {
+          user_id: userId,
+          restaurant_id: restaurantId
+        });
+      }
+      setIsLiked(!isLiked);
+    } catch (error) {
+      console.error('Error updating favorite status:', error);
+    }
   };
 
   return (
