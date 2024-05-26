@@ -18,7 +18,7 @@ function shuffle(array) {
 
 const STORAGE_URL = 'http://localhost:8080';
 
-function Main() {
+function Main({userId}) {
     const [restaurants, setRestaurants] = useState([]);
     const [loading, setLoading] = useState(false);
 
@@ -27,7 +27,7 @@ function Main() {
             setLoading(true);
             const response = await axios.get('http://localhost:8080/custom/recommend', {
                 params:{
-                    "userId": 1
+                    "userId": userId
                 }
             });
             let data = response.data;
@@ -68,7 +68,7 @@ function Main() {
             <div className="flex flex-col grow items-center px-16 pt-12 text-black max-md:px-5 max-md:mt-1.5 max-md:max-w-full">
                 <div className="flex flex-col max-w-full w-[641px]">
                     {restaurants.map((restaurant) => (
-                        <RestaurantCard restaurant={restaurant} userId={1} />
+                        <RestaurantCard restaurant={restaurant} userId={userId} />
                     ))}
                 </div>
                 {loading && <p>Loading...</p>}
@@ -79,6 +79,7 @@ function Main() {
 
 function MyComponent() {
     const [userInfo, setUserInfo] = useState({});
+    const [userId, setUserId] = useState(1);
 
     useEffect(() => {
         const token = localStorage.getItem('token');
@@ -91,6 +92,7 @@ function MyComponent() {
                 name: decodedToken.payload.name,
                 email: decodedToken.payload.email
             });
+            setUserId(decodedToken.payload.user_id);
         } else {
             console.error('No token found');
         }
@@ -112,7 +114,7 @@ function MyComponent() {
                 <div className="mt-1.5 w-full max-md:max-w-full">
                     <div className="flex gap-5 max-md:flex-col max-md:gap-0">
                         <Sidebar userInfo={userInfo} onLogout={handleLogout} />
-                        <Main />
+                        <Main userId={userId}/>
                     </div>
                 </div>
             </div>
