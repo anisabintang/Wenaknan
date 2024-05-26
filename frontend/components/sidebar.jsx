@@ -21,7 +21,7 @@ function Sidebar({ userInfo, onLogout }) {
                             </a>
                         </li>
                         <li className={`flex mt-3 w-full rounded ${router.pathname === '/favorite' ? 'bg-blue-50' : ''}`}>
-                            <a href="favorites" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
+                            <a href="favorite" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
                                     src="/assets/favorites.png"
