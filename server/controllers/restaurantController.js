@@ -1,6 +1,7 @@
 const restaurant = require('../models/restaurantModel');
 const upload = require('../middleware/multerConfig');
 const favorite = require('../models/favoriteModel');
+const sequelize = require('../config/db');
 
 const restaurantController = {
     getAllRestaurants: async (req, res) => {
