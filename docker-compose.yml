@@ -24,6 +24,7 @@ services:
       - app-network
     depends_on:
       - postgres
+      - mlbackend
     environment:
       - DATABASE_URL=postgresql://tsodjfiu:6cP_TqFhAEPPNihuv5UkVAu_359gy9SX@postgres/tsodjfiu
 
@@ -36,6 +37,14 @@ services:
       - app-network
     depends_on:
       - backend
+  
+  mlbackend:
+    build: ./mlAPI
+    container_name: mlbackend-container
+    ports:
+      - "8000:8000"
+    networks:
+      - app-network
 
 networks:
   app-network:
