@@ -11,7 +11,7 @@ function Sidebar({ userInfo, onLogout }) {
                 <nav>
                     <ul>
                         <li className={`flex mt-7 w-full text-black ${router.pathname === '/main' ? 'bg-blue-50' : ''} rounded`}>
-                            <a href="main" className="flex items-center gap-4 p-3 rounded w-full">
+                            <a href="/main" className="flex items-center gap-4 p-3 rounded w-full">
                                 <img
                                     loading="lazy"
                                     src="/assets/foryou.png"
@@ -21,7 +21,7 @@ function Sidebar({ userInfo, onLogout }) {
                             </a>
                         </li>
                         <li className={`flex mt-3 w-full rounded ${router.pathname === '/favorite' ? 'bg-blue-50' : ''}`}>
-                            <a href="favorite" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
+                            <a href="/favorite" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
                                     src="/assets/favorites.png"
@@ -31,7 +31,7 @@ function Sidebar({ userInfo, onLogout }) {
                             </a>
                         </li>
                         <li className={`flex mt-3 w-full rounded ${router.pathname === '/personalized' ? 'bg-blue-50' : ''}`}>
-                            <a href="personalized" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
+                            <a href="/personalized" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
                                     src="/assets/profile.png"
@@ -41,7 +41,7 @@ function Sidebar({ userInfo, onLogout }) {
                             </a>
                         </li>
                         <li className={`flex mt-3 w-full rounded ${router.pathname === '/profile' ? 'bg-blue-50' : ''}`}>
-                            <a href="profile" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
+                            <a href="/profile" className="flex items-center gap-4 p-3 text-slate-700 rounded w-full">
                                 <img
                                     loading="lazy"
                                     src="/assets/profile.png"

@@ -16,12 +16,14 @@ function RestaurantDetails() {
     const [restaurant, setRestaurant] = useState(null);
     const [loading, setLoading] = useState(true);
     const [userInfo, setUserInfo] = useState({});
+    const [userId, setUserId] = useState(1);
 
     // Function to fetch restaurant details
     const fetchRestaurant = async () => {
         try {
+            setLoading(true);
             const response = await axios.get(`${STORAGE_URL}/restaurant/status/${id}`, {
-                params: { user_id: 1 }
+                params: { user_id: userId }
             });
             const data = response.data;
             const imagePath = `${STORAGE_URL}/${data.restaurant_photo_path.replace(/\\/g, '/')}`;
@@ -37,29 +39,65 @@ function RestaurantDetails() {
         }
     };
 
+    const fetchData = async () => {
+        const token = localStorage.getItem('token');
+        if (token && id) {
+            try {
+                const decodedToken = decode(token);
+                console.log('Decoded JWT token:', decodedToken); // Log the contents of the token
+                console.log('payload:', decodedToken.payload);  // Log the payload (data)
+                const userInfo = {
+                    name: decodedToken.payload.name,
+                    email: decodedToken.payload.email,
+                    user_id: decodedToken.payload.user_id
+                };
+                setUserInfo(userInfo);
+                setUserId(userInfo.user_id);
+
+                setLoading(true);
+                const response = await axios.get(`${STORAGE_URL}/restaurant/status/${id}`, {
+                    params: { user_id: userInfo.user_id }
+                });
+                const data = response.data;
+                const imagePath = `${STORAGE_URL}/${data.restaurant_photo_path.replace(/\\/g, '/')}`;
+                const restaurantWithImage = {
+                    ...data,
+                    image: imagePath
+                };
+                setRestaurant(restaurantWithImage);
+                setLoading(false);
+            } catch (error) {
+                console.error('Error fetching data', error);
+                setLoading(false);
+            }
+        } else {
+            console.error('No token found or invalid id');
+        }
+    };
     // Effect hook to fetch restaurant details when id changes
     useEffect(() => {
         if (id) {
-            fetchRestaurant();
+            fetchData();
         }
-    }, [id]);
+    }, [id, userId]);
 
     // Effect hook to fetch user info when component mounts
-    useEffect(() => {
-        const token = localStorage.getItem('token');
-        if (token) {
-            const decodedToken = decode(token);
-            console.log('Decoded JWT token:', decodedToken); // Log the contents of the token
-            console.log('payload:', decodedToken.payload);             // Log the payload (data)
-            setUserInfo({
-                name: decodedToken.payload.name,
-                email: decodedToken.payload.email,
-                user_id: decodedToken.payload.user_id
-            });
-        } else {
-            console.error('No token found');
-        }
-    }, []);
+    // useEffect(() => {
+    //     const token = localStorage.getItem('token');
+    //     if (token) {
+    //         const decodedToken = decode(token);
+    //         console.log('Decoded JWT token:', decodedToken); // Log the contents of the token
+    //         console.log('payload:', decodedToken.payload);             // Log the payload (data)
+    //         setUserInfo({
+    //             name: decodedToken.payload.name,
+    //             email: decodedToken.payload.email,
+    //             user_id: decodedToken.payload.user_id
+    //         });
+    //         setUserId(decodedToken.payload.user_id);
+    //     } else {
+    //         console.error('No token found');
+    //     }
+    // }, []);
 
     const handleLogout = () => {
         localStorage.removeItem('token');
@@ -91,7 +129,7 @@ function RestaurantDetails() {
                         >
                             <div className="flex flex-col grow items-center px-16 pt-12 text-black max-md:px-5 max-md:mt-1.5 max-md:max-w-full">
                                 <div className="flex flex-col max-w-full w-[641px]">
-                                    <RestaurantCard restaurant={restaurant} userId={1} />
+                                    <RestaurantCard restaurant={restaurant} userId={userId} />
                                 </div>
                             </div>
                         </main>
